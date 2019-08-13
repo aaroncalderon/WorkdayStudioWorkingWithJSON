@@ -1,4 +1,4 @@
-# Workday Studio Sample Project
+# Workday Studio Working with JASON Arrays Sample Project
 
 The purpose of this repo is to show how to handle JSON arrays inside Workday Studio.
 
