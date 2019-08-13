@@ -11,8 +11,7 @@ Once you import the project into eclipse, feel free to deploy and run the integr
 The key step is the log labeled __Log_Step1p2__. It shows how to get to the array.
 
 ```mvel
-# 
-Step 1.2
+# Step 1.2
 
 # messages
 @{props['messages'] = props['jsonObject'].getJSONArray("messages")}
