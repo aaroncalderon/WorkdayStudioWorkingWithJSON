@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+     xmlns="http://www.springframework.org/schema/beans"
+     xmlns:beans="http://www.springframework.org/schema/beans"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:cc="http://www.capeclear.com/assembly/10"
+     xmlns:cloud="urn:com.workday/esb/cloud/10.0"
+     xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:pi="urn:com.workday/picof"
+     xmlns:wd="urn:com.workday/bsvc"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ 
+	<cc:assembly id="WorkdayAssembly" version="2019.6">
+        <cc:workday-in id="StartHere" routes-to="AsyncMediation">
+            <cc:integration-system name="WorkingWithJSON"/>
+        </cc:workday-in>
+        <cc:async-mediation id="AsyncMediation">
+            <cc:steps>
+                <cc:eval id="InitializeVars">
+                    <cc:expression>props['samplejsoncontent'] = ''</cc:expression>
+                </cc:eval>
+                <cc:write id="create-sample-json" output="message">
+                    <cc:message>
+                        <cc:static-file input-file="SampleJSON/SampleJSON.json"/>
+                    </cc:message>
+                </cc:write>
+                <cc:eval id="lookForMessageInJson">
+                    <cc:expression>props['jsonObject'] = new org.json.JSONObject(parts[0].text)</cc:expression>
+                </cc:eval>
+                <cc:log id="Log_Step1">
+                    <cc:log-message>
+                        <cc:text># &#xD;
+Step 1&#xD;
+&#xD;
+# jsonObject:&#xD;
+@{props['jsonObject']}&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:log id="Log_Step1p1">
+                    <cc:log-message>
+                        <cc:text># &#xD;
+Step 1.1&#xD;
+&#xD;
+# code&#xD;
+@{new org.json.JSONObject(parts[0].text).getString(&quot;code&quot;)}&#xD;
+&#xD;
+# code2&#xD;
+@{props['jsonObject'].getString(&quot;code2&quot;)}&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+                <cc:log id="Log_Step1p2">
+                    <cc:log-message>
+                        <cc:text># &#xD;
+Step 1.2&#xD;
+&#xD;
+# messages&#xD;
+@{props['messages'] = props['jsonObject'].getJSONArray(&quot;messages&quot;)}&#xD;
+&#xD;
+# message 1&#xD;
+@{props['messages'].get(0)}&#xD;
+&#xD;
+# message 1&#xD;
+@{props['messages'].length()}&#xD;
+</cc:text>
+                    </cc:log-message>
+                </cc:log>
+            </cc:steps>
+        </cc:async-mediation>
+	</cc:assembly>
+
+</beans>
